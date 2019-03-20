@@ -6,4 +6,6 @@ public interface DatabaseInterface {
     public boolean compareData(String foodName, int Quantity);
 
     public boolean deleteData(String foodName);
+
+    public int getQuantity(String name);
 }

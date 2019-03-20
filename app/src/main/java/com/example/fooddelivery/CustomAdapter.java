@@ -52,28 +52,33 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         myViewHolder.cost.append(foodModel.getCost());
         myViewHolder.foodImage.setImageBitmap(foodModel.getFoodImage());
         myViewHolder.numberPicker.setVisibility(View.INVISIBLE);
+        int q = databaseImplementation.getQuantity(foodModelList.get(i).getFoodName());
+        if (q != 0) {
+            myViewHolder.numberPicker.setValue(q);
+            myViewHolder.numberPicker.setVisibility(View.VISIBLE);
+            myViewHolder.textView.setVisibility(View.INVISIBLE);
+            myViewHolder.addToCart.setEnabled(false);
+            myViewHolder.addToCart.setClickable(false);
+        }
         myViewHolder.addToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                myViewHolder.addToCart.setClickable(false);
                 myViewHolder.textView.setVisibility(View.INVISIBLE);
                 myViewHolder.numberPicker.setVisibility(View.VISIBLE);
-                boolean isSame = databaseImplementation.compareData(myViewHolder.foodName.getText().toString(), myViewHolder.numberPicker.getValue());
-                if (!isSame) {
-                    id++;
-                    SharedPreferences settings = context.getSharedPreferences("ID_STORAGE", 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putInt("ID_", id);
-                    editor.apply();
-                    databaseImplementation.insertData(new CartList(id,
-                            myViewHolder.foodName.getText().toString(),
-                            myViewHolder.numberPicker.getValue(),
-                            foodModel.getCost()));
-                }
+                myViewHolder.numberPicker.setValue(1);
+                id++;
+                SharedPreferences settings = context.getSharedPreferences("ID_STORAGE", 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putInt("ID_", id);
+                editor.apply();
+                databaseImplementation.insertData(new CartList(id,
+                        myViewHolder.foodName.getText().toString(),
+                        myViewHolder.numberPicker.getValue(),
+                        foodModel.getCost()));
             }
         });
+
         myViewHolder.numberPicker.setListener(new ScrollableNumberPickerListener() {
             @Override
             public void onNumberPicked(int value) {

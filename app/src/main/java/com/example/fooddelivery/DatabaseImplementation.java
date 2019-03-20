@@ -47,12 +47,24 @@ public class DatabaseImplementation implements DatabaseInterface {
         cartLists = new ArrayList<>();
         cartLists = databaseHandler.getAllItems();
         for (int m = 0; m < cartLists.size(); m++) {
-            if(foodName.equals(cartLists.get(m).getOrdered_food_name())){
+            if (foodName.equals(cartLists.get(m).getOrdered_food_name())) {
                 databaseHandler.deleteItem(cartLists.get(m));
                 Log.d("COUNT", String.valueOf(databaseHandler.getNotesCount()));
                 return true;
             }
         }
         return false;
+    }
+
+    @Override
+    public int getQuantity(String name) {
+        cartLists = new ArrayList<>();
+        cartLists = databaseHandler.getAllItems();
+        for (int j = 0; j < cartLists.size(); j++) {
+            if(name.equals(cartLists.get(j).getOrdered_food_name())){
+                return cartLists.get(j).getQuantity();
+            }
+        }
+        return 0;
     }
 }
