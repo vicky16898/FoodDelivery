@@ -46,7 +46,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, int i) {
+        final int pos = i;
         final FoodModel foodModel = foodModelList.get(i);
         myViewHolder.foodName.setText(foodModel.getFoodName());
         myViewHolder.cost.append(foodModel.getCost());
@@ -83,13 +84,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
             @Override
             public void onNumberPicked(int value) {
                 if (myViewHolder.numberPicker.getValue() != 0) {
-                    boolean compare = databaseImplementation.compareData(foodModelList.get(i).getFoodName(), myViewHolder.numberPicker.getValue());
+                    myViewHolder.addToCart.setClickable(false);
+                    myViewHolder.addToCart.setClickable(false);
+                    boolean compare = databaseImplementation.compareData(foodModelList.get(pos).getFoodName(), myViewHolder.numberPicker.getValue());
                     Log.d("compare", String.valueOf(compare));
 
                 } else {
                     myViewHolder.numberPicker.setVisibility(View.INVISIBLE);
                     myViewHolder.textView.setVisibility(View.VISIBLE);
-                    boolean deleteData = databaseImplementation.deleteData(foodModelList.get(i).getFoodName());
+                    myViewHolder.addToCart.setEnabled(true);
+                    myViewHolder.addToCart.setClickable(true);
+                    boolean deleteData = databaseImplementation.deleteData(foodModelList.get(pos).getFoodName());
                     Log.d("deleted", String.valueOf(deleteData));
                     id--;
                     SharedPreferences settings = context.getSharedPreferences("ID_STORAGE", 0);
